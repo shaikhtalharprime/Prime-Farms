@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prime Farms — Karachi</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background-color: #0f0c05;
+    background-image: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1600&q=80');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: #f0ebe0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+    position: relative;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: rgba(8, 12, 4, 0.75);
+    z-index: 0;
+  }
+
+  .page {
+    width: 100%;
+    max-width: 480px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* LOGO */
+  .logo {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+
+  .logo-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: #c9a84c;
+    letter-spacing: 0.08em;
+    display: block;
+  }
+
+  .logo-sub {
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: #6b8f61;
+    margin-top: 4px;
+  }
+
+  /* CARD */
+  .card {
+    background: #1a1208;
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 6px;
+    padding: 36px 32px;
+  }
+
+  /* HEADLINE */
+  .headline {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+
+  .headline h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.55rem;
+    color: #ffffff;
+    line-height: 1.3;
+    margin-bottom: 8px;
+  }
+
+  .headline h1 span { color: #c9a84c; }
+
+  .headline p {
+    font-size: 0.82rem;
+    color: #8a7f6e;
+    line-height: 1.6;
+  }
+
+  /* DIVIDER */
+  .divider {
+    border: none;
+    border-top: 1px solid rgba(201,168,76,0.15);
+    margin: 24px 0;
+  }
+
+  /* PLOTS */
+  .plots-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #c9a84c;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  .plots {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+
+  .plot {
+    flex: 1;
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 4px;
+    padding: 12px 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: transparent;
+    color: #f0ebe0;
+  }
+
+  .plot:hover, .plot.active {
+    border-color: #c9a84c;
+    background: rgba(201,168,76,0.1);
+  }
+
+  .plot-size {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: #c9a84c;
+    display: block;
+    line-height: 1;
+  }
+
+  .plot-unit {
+    font-size: 0.62rem;
+    color: #8a7f6e;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 3px;
+  }
+
+  /* BADGES */
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 24px;
+    justify-content: center;
+  }
+
+  .badge {
+    background: rgba(107,143,97,0.12);
+    border: 1px solid rgba(107,143,97,0.3);
+    color: #6b8f61;
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    padding: 5px 10px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  /* LOCATION */
+  .location-box {
+    background: rgba(201,168,76,0.05);
+    border: 1px solid rgba(201,168,76,0.12);
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin-bottom: 24px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .loc-pin { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+
+  .loc-text {
+    font-size: 0.8rem;
+    color: #8a7f6e;
+    line-height: 1.6;
+  }
+
+  .loc-text strong {
+    display: block;
+    color: #c9a84c;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+
+  /* FORM */
+  .form-group {
+    margin-bottom: 14px;
+  }
+
+  .form-group label {
+    display: block;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #8a7f6e;
+    margin-bottom: 6px;
+  }
+
+  .form-group input,
+  .form-group select {
+    width: 100%;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(201,168,76,0.18);
+    color: #f0ebe0;
+    padding: 13px 14px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    border-radius: 3px;
+    outline: none;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+  }
+
+  .form-group input::placeholder { color: #4a4030; }
+
+  .form-group input:focus,
+  .form-group select:focus {
+    border-color: #c9a84c;
+  }
+
+  .form-group select option { background: #1a1208; color: #f0ebe0; }
+
+  .btn-submit {
+    width: 100%;
+    background: #c9a84c;
+    color: #0f0c05;
+    border: none;
+    padding: 16px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 6px;
+  }
+
+  .btn-submit:hover {
+    background: #e8c96d;
+    transform: translateY(-1px);
+  }
+
+  .privacy {
+    text-align: center;
+    font-size: 0.7rem;
+    color: #4a4030;
+    margin-top: 12px;
+  }
+
+  /* SUCCESS */
+  .success {
+    display: none;
+    text-align: center;
+    padding: 20px 0 8px;
+  }
+
+  .success-icon { font-size: 2.5rem; margin-bottom: 12px; }
+
+  .success h3 {
+    font-family: 'Playfair Display', serif;
+    color: #c9a84c;
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+  }
+
+  .success p {
+    color: #8a7f6e;
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+
+  /* WHATSAPP */
+  .wa-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: #25D366;
+    color: #fff;
+    text-decoration: none;
+    padding: 13px;
+    border-radius: 3px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-top: 10px;
+    transition: opacity 0.2s;
+  }
+
+  .wa-btn:hover { opacity: 0.9; }
+
+  /* FOOTER NOTE */
+  .footer-note {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 0.7rem;
+    color: #3a3020;
+  }
+
+  .footer-note span { color: #c9a84c; }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- LOGO -->
+  <div class="logo">
+    <span class="logo-text">PRIME FARMS</span>
+    <div class="logo-sub">Agricultural Land — Karachi</div>
+  </div>
+
+  <!-- CARD -->
+  <div class="card">
+
+    <!-- HEADLINE -->
+    <div class="headline">
+      <h1>Own Your <span>Farm Plot</span><br>Near Karachi</h1>
+      <p>Premium agricultural plots with 99-year lease,<br>boundary wall & immediate possession.</p>
+    </div>
+
+    <!-- PLOT SIZES -->
+    <div class="plots-label">Available Plot Sizes</div>
+    <div class="plots">
+      <div class="plot active" onclick="selectPlot(this, '1000 Sqyds')">
+        <span class="plot-size">1000</span>
+        <div class="plot-unit">Sq. Yards</div>
+      </div>
+      <div class="plot" onclick="selectPlot(this, '2000 Sqyds')">
+        <span class="plot-size">2000</span>
+        <div class="plot-unit">Sq. Yards</div>
+      </div>
+      <div class="plot" onclick="selectPlot(this, '4000 Sqyds')">
+        <span class="plot-size">4000</span>
+        <div class="plot-unit">Sq. Yards</div>
+      </div>
+    </div>
+
+    <!-- BADGES -->
+    <div class="badges">
+      <div class="badge">🧱 Boundary Wall</div>
+      <div class="badge">⚡ Electricity</div>
+      <div class="badge">📜 99 Years Lease</div>
+      <div class="badge">🔑 Immediate Possession</div>
+    </div>
+
+    <!-- LOCATION -->
+    <div class="location-box">
+      <div class="loc-pin">📍</div>
+      <div class="loc-text">
+        <strong>Location</strong>
+        Just 5 Min Drive from Maweshi Mandi, Northern Bypass — Next to Al Ghafoor Green City, Karachi
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- FORM -->
+    <div id="formArea">
+      <div class="form-group">
+        <label>Full Name *</label>
+        <input type="text" id="fname" placeholder="Enter your name">
+      </div>
+      <div class="form-group">
+        <label>City *</label>
+        <input type="text" id="fcity" placeholder="Your city">
+      </div>
+      <div class="form-group">
+        <label>Plot Interest</label>
+        <select id="finterest">
+          <option value="1000 Sqyds">1000 Sq. Yards</option>
+          <option value="2000 Sqyds">2000 Sq. Yards</option>
+          <option value="4000 Sqyds">4000 Sq. Yards</option>
+          <option value="All Sizes">Explore All Sizes</option>
+        </select>
+      </div>
+
+      <button class="btn-submit" onclick="submitForm()">Call For Details →</button>
+
+      <a href="https://wa.me/923059608955?text=Assalam%20u%20Alaikum%2C%20I%20am%20interested%20in%20Prime%20Farms%20plot.%20Please%20share%20details." 
+         class="wa-btn" target="_blank">
+        💬 WhatsApp Us Directly
+      </a>
+
+      <p class="privacy">🔒 Your details are 100% private & secure</p>
+    </div>
+
+    <!-- SUCCESS -->
+    <div class="success" id="successArea">
+      <div class="success-icon">✅</div>
+      <h3>Thank You!</h3>
+      <p>Our team will call you shortly.<br>You can also reach us directly on WhatsApp.</p>
+      <a href="https://wa.me/923059608955?text=Assalam%20u%20Alaikum%2C%20I%20am%20interested%20in%20Prime%20Farms%20plot.%20Please%20share%20details." 
+         class="wa-btn" target="_blank" style="margin-top:20px;">
+        💬 WhatsApp Now
+      </a>
+    </div>
+
+  </div>
+
+  <div class="footer-note">A project by <span>Prime Investment</span> · Managed by <span>SS Associates</span></div>
+
+</div>
+
+<script>
+  let selectedPlot = '1000 Sqyds';
+
+  function selectPlot(el, val) {
+    document.querySelectorAll('.plot').forEach(p => p.classList.remove('active'));
+    el.classList.add('active');
+    selectedPlot = val;
+    document.getElementById('finterest').value = val;
+  }
+
+  function submitForm() {
+    const name = document.getElementById('fname').value.trim();
+    const city = document.getElementById('fcity').value.trim();
+    if (!name || !city) {
+      alert('Please enter your name and city.');
+      return;
+    }
+    document.getElementById('formArea').style.display = 'none';
+    document.getElementById('successArea').style.display = 'block';
+  }
+</script>
+
+</body>
+</html>
